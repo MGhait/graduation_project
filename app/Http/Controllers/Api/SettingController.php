@@ -15,12 +15,11 @@ class SettingController extends Controller
      */
     public function __invoke(Request $request)
     {
+//        need to add administration edit method later
         $setting = Setting::find(1);
-//        dd($setting);
         if ($setting) {
             return ApiResponse::sendResponse(200,'Setting Retrieved Successfully',new SettingsResource($setting));
         }
         return ApiResponse::sendResponse(200,'Setting NOT Found',[]);
-//        return SettingsResource::collection($setting);
     }
 }

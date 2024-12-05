@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ICController;
 use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\StoreController;
@@ -29,3 +30,13 @@ Route::get('/stores', StoreController::class);
 
 # ------------------- Messages Module ---------------#
 Route::post('/message', MessageController::class);
+
+
+# ------------------- IC Module ---------------#
+Route::prefix('ic')->controller(ICController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::post('/imagestore', 'storeImage');
+    Route::post('/search', 'searchIC');
+//    Route::post('/searchic', 'searchIC2');
+    Route::post('/store', 'store');
+});
