@@ -22,6 +22,7 @@ class ICResource extends JsonResource
             'Slug' => $this->slug,
             'IC_image' => $this->mainImage ? url('storage/images/' . $this->mainImage->url) : null,
             'IC_blogDiagram' => $this->blogDiagram ? url('storage/images/' . $this->blogDiagram->url) : null,
+            'IC_truth_table' => $this->truthTables ? TruthTableResource::collection($this->truthTables) : null,
             'IC_store' => $this->store->name,
             'IC_views' => $this->views,
             'IC_likes' => $this->likes,

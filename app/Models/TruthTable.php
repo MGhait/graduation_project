@@ -13,6 +13,6 @@ class TruthTable extends Model
 
     public function ic() :BelongsTo
     {
-        $this->belongsTo(IC::class);
+        return $this->belongsTo(IC::class, 'ic_id', 'id');
     }
 }

@@ -18,7 +18,7 @@ class IC extends Model
     }
     public function truthTables() : HasMany
     {
-        return $this->hasMany(TruthTable::class);
+        return $this->hasMany(TruthTable::class, 'ic_id', 'id');
     }
 
     public function mainImage() : BelongsTo

@@ -10,6 +10,7 @@ use App\Http\Requests\UpdateICRequest;
 use App\Http\Resources\ICResource;
 use App\Models\IC;
 use App\Models\Image;
+use App\Models\TruthTable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
