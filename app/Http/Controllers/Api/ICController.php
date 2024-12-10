@@ -8,9 +8,9 @@ use App\Http\Requests\StoreICImageRequest;
 use App\Http\Requests\StoreICRequest;
 use App\Http\Requests\UpdateICRequest;
 use App\Http\Resources\ICResource;
+use App\Http\Resources\ImageResourece;
 use App\Models\IC;
 use App\Models\Image;
-use App\Models\TruthTable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -81,10 +81,10 @@ class ICController extends Controller
         $imageName = time() . '.' . $image->getClientOriginalName();
         $image->storeAs('images', $imageName, 'public');
 
-        Image::create([
+        $image=Image::create([
             'url' => $imageName,
         ]);
-        return ApiResponse::sendResponse(201,'Image Uploaded Successfully',[]);
+        return ApiResponse::sendResponse(201,'Image Uploaded Successfully',new ImageResourece($image));
 
     }
 
