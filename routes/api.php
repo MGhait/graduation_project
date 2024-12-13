@@ -39,4 +39,6 @@ Route::prefix('ic')->controller(ICController::class)->group(function () {
     Route::post('/search', 'searchIC');
 //    Route::post('/searchic', 'searchIC2');
     Route::post('/store', 'store');
+    Route::post('/truthTable', 'storeTruthTable');
 });
+

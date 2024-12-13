@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -18,26 +20,20 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:' . User::class,
-            'password' => ['required','confirmed',Rules\Password::defaults()],
+            'password' => ['required',Rules\Password::defaults()],
             'phone' => 'nullable|string|max:255',
-            'longitude' => 'nullable|string|max:255',
-            'latitude' => 'nullable|string|max:255',
-            'google_id' => 'nullable|string|max:255',
         ],[],[
             'name' => 'Name',
             'email' => 'Email',
             'password' => 'Password',
             'phone' => 'Phone',
-            'longitude' => 'Longitude',
-            'latitude' => 'Latitude',
-            'google_id' => 'Google Id',
         ]);
 
         if($validator->fails()){
             return ApiResponse::sendResponse(422, 'Register Validation Error.', $validator->errors());
         }
 
-        $user = User::create([
+        $admin = Admin::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
@@ -47,9 +43,9 @@ class AuthController extends Controller
             'google_id' => $request->google_id ?? null,
         ]);
 
-        $data['token']= $user->createToken('APIToken')->plainTextToken;
-        $data['name']= $user->name;
-        $data['email']= $user->email;
+        $data['token']= $admin->createToken('APIToken')->plainTextToken;
+        $data['name']= $admin->name;
+        $data['email']= $admin->email;
         return ApiResponse::sendResponse(201,'User Created Successfully',$data);
 
     }
