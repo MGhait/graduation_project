@@ -3,9 +3,9 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ICController;
 use App\Http\Controllers\Api\MessageController;
+use App\Http\Controllers\Api\OTPController;
 use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\StoreController;
-use App\Http\Controllers\OTPController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
