@@ -14,6 +14,26 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
 
+    public function generateOTP()
+    {
+        $this->otp = rand(100000, 999999);
+        $this->otp_till = now()->addMinutes(20);
+        $this->save();
+    }
+
+    public function resetOTP()
+    {
+        $this->otp = null;
+        $this->otp_till = null;
+        $this->save();
+    }
+
+    public function resetPass()
+    {
+        $this->otp = 'access';
+        $this->otp_till = now()->addMinutes(5);
+        $this->save();
+    }
     protected $guarded = ['id'];
 
 

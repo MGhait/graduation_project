@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\ICController;
 use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\StoreController;
+use App\Http\Controllers\OTPController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,8 +20,11 @@ Route::get('/', function (Request $request) {
 Route::controller(AuthController::class)->group(function () {
     Route::post('/register', 'register');
     Route::post('/login', 'login');
+    Route::post('/reset-password', 'resetPassword');
     Route::post('/logout', 'logout')->middleware('auth:sanctum');
 });
+Route::post('/forget-password', [OTPController::class, 'forgetPassword']);
+Route::post('/verify-otp', [OTPController::class, 'verifyOTP'])->name('otp.verify');
 
 # ------------------- Settings Module ---------------#
 Route::get('/settings', SettingController::class);

@@ -33,7 +33,7 @@ class AuthController extends Controller
             return ApiResponse::sendResponse(422, 'Register Validation Error.', $validator->errors());
         }
 
-        $admin = Admin::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
@@ -43,9 +43,9 @@ class AuthController extends Controller
             'google_id' => $request->google_id ?? null,
         ]);
 
-        $data['token']= $admin->createToken('APIToken')->plainTextToken;
-        $data['name']= $admin->name;
-        $data['email']= $admin->email;
+        $data['token']= $user->createToken('APIToken')->plainTextToken;
+        $data['name']= $user->name;
+        $data['email']= $user->email;
         return ApiResponse::sendResponse(201,'User Created Successfully',$data);
 
     }
@@ -71,6 +71,42 @@ class AuthController extends Controller
             return ApiResponse::sendResponse(200,'User Logged In Successfully',$data);
         }
         return ApiResponse::sendResponse(422,'These credentials do not match our records.',[]);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        //user's email must be sent with the request
+        $request->validate([
+            'email' => ['required', 'email', 'exists:users,email'],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
+
+        //check otp then change it and reset pasword and send the response
+        $user = User::where('email', $request->email)->first();
+        if (!$user)
+        {
+            return ApiResponse::sendResponse(200, 'User not found.', []);
+        }
+        else
+        {
+            if ($user->otp_till < now()) {
+                return ApiResponse::sendResponse(200, 'Your OTP Has Expired.', []);
+            }
+            if ($user->otp != 'access'){
+                return ApiResponse::sendResponse(200, 'Your OTP Need Verification.', []);
+            }
+            if ($user->otp_till >= now() && $user->otp == 'access') {
+                $user->email_verified_at = now();
+                $user->password= Hash::make($request->password);
+                $user->resetOTP();
+                $user->save();
+                return ApiResponse::sendResponse(200, 'Password Reset Successfully.', []);
+            }
+            return ApiResponse::sendResponse(200, 'Something Went Wrong ! Please try again Later.', []);
+        }
+
+
+
     }
 
     public function logout(Request $request)
