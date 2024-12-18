@@ -41,6 +41,9 @@ Route::prefix('ic')->controller(ICController::class)->group(function () {
     Route::get('/', 'index');
     Route::get('/popular', 'popularICs');
     Route::get('/{ic}', 'show');
+    Route::middleware(['auth:sanctum'])->group(function () {
+        Route::post('/save', 'saveIC');
+    });
     Route::post('/imagestore', 'storeImage');
     Route::post('/search', 'searchIC');
 //    Route::post('/searchic', 'searchIC2');

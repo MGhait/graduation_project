@@ -34,6 +34,12 @@ class User extends Authenticatable
         $this->otp_till = now()->addMinutes(5);
         $this->save();
     }
+
+    public function savedIcs()
+    {
+        return $this->belongsToMany(IC::class, 'ic_user', 'user_id', 'ic_id')->withTimestamps();
+    }
+
     protected $guarded = ['id'];
 
 

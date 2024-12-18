@@ -55,6 +55,23 @@ class ICController extends Controller
         return ApiResponse::sendResponse(200, 'No ICs Found', []);
     }
 
+    public function saveIc(Request $request)
+    {
+        $request->validate([
+            'ic_id' => 'required|exists:ics,id',
+        ]);
+
+        $user = auth()->user(); // Get the authenticated user
+        $icId = $request->input('ic_id');
+
+        // Attach the IC to the user (prevents duplicates)
+        $user->savedIcs()->syncWithoutDetaching($icId);
+        $data['user'] = $user->email;
+        $data['ic_id'] = $icId;
+
+        return ApiResponse::sendResponse(200, 'IC Saved Successfully', $data);
+    }
+
     public function storeTruthTable(StoreTruthTable $request)
     {
         $data = $request->validated();
