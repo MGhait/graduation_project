@@ -23,7 +23,7 @@ class ICController extends Controller
     {
         $ics = IC::with(['mainImage', 'blogDiagram'])->get();
         if (count($ics) > 0) {
-            return ApiResponse::sendResponse(200, 'Setting Retrieved Successfully', ICResource::collection($ics));
+            return ApiResponse::sendResponse(200, 'IC Retrieved Successfully', ICResource::collection($ics));
         }
         return ApiResponse::sendResponse(200, 'No Ics Found', []);
     }
@@ -36,9 +36,11 @@ class ICController extends Controller
         return ApiResponse::sendResponse(201, 'IC Record Created Successfully', []);
     }
 
-    public function show(IC $ic)
+    public function show($id)
     {
-
+        $ic = IC::with(['mainImage', 'blogDiagram'])->find($id);
+        $ic->increment('views');
+        return ApiResponse::sendResponse(200, 'IC Retrieved Successfully', New ICResource($ic));
     }
 
     public function storeTruthTable(StoreTruthTable $request)
@@ -63,7 +65,7 @@ class ICController extends Controller
             ->paginate(1);
 
         if (count($ics) > 0) {
-            return ApiResponse::sendResponse(200, 'Setting Retrieved Successfully', ICResource::collection($ics));
+            return ApiResponse::sendResponse(200, 'IC Retrieved Successfully', ICResource::collection($ics));
         }
         return ApiResponse::sendResponse(200, 'No Ics Found', []);
     }
@@ -78,7 +80,7 @@ class ICController extends Controller
             ->get();
 
         if (count($ics) > 0) {
-            return ApiResponse::sendResponse(200, 'Setting Retrieved Successfully', ICResource::collection($ics));
+            return ApiResponse::sendResponse(200, 'IC Retrieved Successfully', ICResource::collection($ics));
         }
         return ApiResponse::sendResponse(200, 'No Ics Found', null);
     }
