@@ -39,6 +39,7 @@ Route::post('/message', MessageController::class);
 # ------------------- IC Module ---------------#
 Route::prefix('ic')->controller(ICController::class)->group(function () {
     Route::get('/', 'index');
+    Route::get('/popular', 'popularICs');
     Route::get('/{ic}', 'show');
     Route::post('/imagestore', 'storeImage');
     Route::post('/search', 'searchIC');

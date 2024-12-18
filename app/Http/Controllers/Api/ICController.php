@@ -39,8 +39,20 @@ class ICController extends Controller
     public function show($id)
     {
         $ic = IC::with(['mainImage', 'blogDiagram'])->find($id);
-        $ic->increment('views');
-        return ApiResponse::sendResponse(200, 'IC Retrieved Successfully', New ICResource($ic));
+        if (count($ic) > 0) {
+            $ic->increment('views');
+            return ApiResponse::sendResponse(200, 'IC Retrieved Successfully', New ICResource($ic));
+        }
+        return ApiResponse::sendResponse(200, 'No Ics Found', []);
+    }
+
+    public function popularICs()
+    {
+        $ic = IC::with(['mainImage', 'blogDiagram'])->orderBy('views', 'DESC')->take(10)->get();
+        if (count($ic) > 0) {
+            return ApiResponse::sendResponse(200, 'ICs Retrieved Successfully', ICResource::collection($ic));
+        }
+        return ApiResponse::sendResponse(200, 'No ICs Found', []);
     }
 
     public function storeTruthTable(StoreTruthTable $request)
