@@ -44,6 +44,7 @@ Route::prefix('ic')->controller(ICController::class)->group(function () {
     Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/save', 'saveIC');
         Route::get('/saved', 'getSavedICs');
+        Route::post('/remove', 'removeSavedIC');
     });
     Route::post('/imagestore', 'storeImage');
     Route::post('/search', 'searchIC');

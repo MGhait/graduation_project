@@ -81,6 +81,24 @@ class ICController extends Controller
         return ApiResponse::sendResponse(200, 'No ICs Found', []);
     }
 
+    public function removeSavedIC(Request $request)
+    {
+        $request->validate([
+            'ic_id' => 'required|exists:ics,id',
+        ],[],[
+            'ic_id' => 'IC',
+        ]);
+        $user = auth()->user();
+        $icId = $request->input('ic_id');
+
+        // check if the ic exits in the user saved list first
+        if (!$user->savedIcs()->where('ic_id', $icId)->exists()) {
+            return ApiResponse::sendResponse(404, 'IC not found in user\'s saved list');
+        }
+        $user->savedIcs()->detach($icId);
+        return ApiResponse::sendResponse(200, 'IC Removed Successfully');
+    }
+
     public function storeTruthTable(StoreTruthTable $request)
     {
         $data = $request->validated();
