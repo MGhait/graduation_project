@@ -72,6 +72,15 @@ class ICController extends Controller
         return ApiResponse::sendResponse(200, 'IC Saved Successfully', $data);
     }
 
+    public function getSavedICs(Request $request){
+        $user = auth()->user();
+        $savedIcs = $user->savedIcs;
+        if (count($savedIcs) > 0) {
+            return ApiResponse::sendResponse(200, 'ICs Retrieved Successfully', ICResource::collection($savedIcs));
+        }
+        return ApiResponse::sendResponse(200, 'No ICs Found', []);
+    }
+
     public function storeTruthTable(StoreTruthTable $request)
     {
         $data = $request->validated();
