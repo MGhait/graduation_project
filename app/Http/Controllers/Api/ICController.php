@@ -113,17 +113,29 @@ class ICController extends Controller
     public function searchIC2(Request $request)
     {
         $query = $request->input('query');
+        $codes = IC::extractICCodes($query);
+//        dd($codes);
+        $query = IC::query();
 
-        $ics = IC::with(['mainImage', 'blogDiagram', 'store'])
-            ->where('commName', 'like', '%' . $query . '%')
-            ->orWhere('name', 'like', '%' . $query . '%')
-            ->orWhere('slug', 'like', '%' . $query . '%')
-            ->paginate(1);
+        foreach ($codes as $code) {
+            $query->orWhere('name', 'like', "%{$code}%");
+        }
 
+        $ics = $query->get();
         if (count($ics) > 0) {
             return ApiResponse::sendResponse(200, 'IC Retrieved Successfully', ICResource::collection($ics));
         }
         return ApiResponse::sendResponse(200, 'No Ics Found', []);
+    }
+
+    public function search3(Request $request)
+    {
+        $query = $request->input('query');
+        $out = IC::regxSearch($query);
+        if (count($out) > 0) {
+            return ApiResponse::sendResponse(200, 'IC Retrieved Successfully', $out);
+        }
+        return ApiResponse::sendResponse(200, 'No Ics Found',[]);
     }
     public function searchIC(Request $request)
     {

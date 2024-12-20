@@ -48,7 +48,8 @@ Route::prefix('ic')->controller(ICController::class)->group(function () {
     });
     Route::post('/imagestore', 'storeImage');
     Route::post('/search', 'searchIC');
-//    Route::post('/searchic', 'searchIC2');
+    Route::post('/searchic', 'searchIC2');
+    Route::post('/searchforic', 'search3');
     Route::post('/store', 'store');
     Route::post('/truthTable', 'storeTruthTable');
 });

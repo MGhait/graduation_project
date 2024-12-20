@@ -36,4 +36,25 @@ class IC extends Model
     {
         return $this->belongsTo(Image::class, 'blog_diagram');
     }
+    public static function extractICCodes(string $input): array
+    {
+        // Regular expression to capture IC codes
+//        preg_match_all('/74[A-Z0-9]+|74[0-9]+/', $input, $matches);
+        preg_match_all('/\d.*\d/', $input, $matches);
+        return $matches[0] ?? [];
+    }
+
+    public static function regxSearch(string $search)
+    {
+        $icCodes = self::getICCodes($search);
+        $pattern = implode('.*', str_split($icCodes));
+
+        return IC::whereRaw("name REGEXP ?", [$pattern])->get();
+    }
+
+    public static function getICCodes(string $input)
+    {
+        preg_match_all('/\d/', $input, $matches);
+        return implode('', $matches[0]);
+    }
 }
