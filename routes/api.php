@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\FileController;
 use App\Http\Controllers\Api\ICController;
 use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\OTPController;
@@ -53,4 +54,6 @@ Route::prefix('ic')->controller(ICController::class)->group(function () {
     Route::post('/store', 'store');
     Route::post('/truthTable', 'storeTruthTable');
 });
+
+Route::post('/file/upload', [FileController::class, 'save']);
 

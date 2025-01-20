@@ -31,6 +31,10 @@ class IC extends Model
     {
         return $this->belongsTo(Image::class, 'image');
     }
+    public function datasheet() : BelongsTo
+    {
+        return $this->belongsTo(File::class, 'datasheet_file_id');
+    }
 
     public function blogDiagram(): BelongsTo
     {
