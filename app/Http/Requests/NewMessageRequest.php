@@ -35,7 +35,7 @@ class NewMessageRequest extends FormRequest
         return [
             'name' => 'required|string',
             'email' => 'required|email',
-            'phone' => 'required',
+            'subject' => 'required|string',
             'message' => 'required|string',
         ];
     }
@@ -45,7 +45,7 @@ class NewMessageRequest extends FormRequest
         return [
             'name' => 'Name',
             'email' => 'Email',
-            'phone' => 'Phone',
+            'subject' => 'Subject',
             'message' => 'Message',
         ];
     }
