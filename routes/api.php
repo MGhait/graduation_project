@@ -19,8 +19,13 @@ Route::get('/', function (Request $request) {
 
 # ------------------- Auth Module ---------------#
 Route::controller(AuthController::class)->group(function () {
-    Route::post('/register', 'register');
+//    Route::post('/register', 'register');
     Route::post('/login', 'login');
+    if (config('verification.way') == 'email'){
+        Route::post('register', 'register');
+        Route::get('/verify', 'verify');
+    }
+    Route::post('/sendEmail', 'sendVerificationEmail');
     Route::post('/reset-password', 'resetPassword');
     Route::post('/logout', 'logout')->middleware('auth:sanctum');
 });
@@ -53,6 +58,7 @@ Route::prefix('ic')->controller(ICController::class)->group(function () {
     Route::post('/searchforic', 'search3');
     Route::post('/store', 'store');
     Route::post('/truthTable', 'storeTruthTable');
+    Route::post('/description', 'storeDescription');
 });
 
 Route::post('/file/upload', [FileController::class, 'save']);

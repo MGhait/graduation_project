@@ -15,17 +15,19 @@ class VerificationEmail extends Mailable
     public $email;
     public $name;
     public $token;
+    public $for;
 
     /**
      * Create a new message instance.
      */
 
 
-    public function __construct($email,$name, $token)
+    public function __construct($email,$name, $token, $for = 'api' )
     {
         $this->email = $email;
         $this->name = $name;
         $this->token = $token;
+        $this->for = $for;
     }
     public function build()
     {
@@ -33,7 +35,7 @@ class VerificationEmail extends Mailable
             ->view('emails.verify')
             ->with([
                 'name' => $this->name,
-                'url' => url('/admin/verify?email='. $this->email.'&token='. $this->token),
+                'url' => url('/' . $this->for. '/verify?email='. $this->email.'&token='. $this->token),
             ]);
     }
 

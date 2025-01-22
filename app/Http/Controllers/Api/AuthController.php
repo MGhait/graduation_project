@@ -4,13 +4,18 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
+use App\Mail\VerificationEmail;
 use App\Models\Admin;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 
 class AuthController extends Controller
@@ -43,6 +48,14 @@ class AuthController extends Controller
             'google_id' => $request->google_id ?? null,
         ]);
 
+        $token = Str::random(64);
+        DB::table('email_verifications')->insert([
+            'email' => $user->email,
+            'token' => $token,
+        ]);
+        Mail::to($user->email)->send(new VerificationEmail(Crypt::encryptString($user->email),$user->name, Crypt::encryptString($token)));
+
+
         $data['token']= $user->createToken('APIToken')->plainTextToken;
         $data['name']= $user->name;
         $data['email']= $user->email;
@@ -71,6 +84,47 @@ class AuthController extends Controller
             return ApiResponse::sendResponse(200,'User Logged In Successfully',$data);
         }
         return ApiResponse::sendResponse(422,'These credentials do not match our records.',[]);
+    }
+
+    public function verify(Request $request)
+    {
+        $token = Crypt::decryptString($request->query('token'));
+        $email = Crypt::decryptString($request->query('email'));
+        dd($email);
+
+        $record = DB::table('email_verifications')
+            ->where('token', $token)
+            ->where('email', $email)
+            ->first();
+
+        if (!$record) {
+            return ApiResponse::sendResponse(400, 'Invalid Token');
+        }
+
+        $user = User::where('email', $email)->first();
+        if ($user) {
+            Log::info('User found:', $user->toArray());
+
+            $user->email_verified_at = now();
+            $user->save();
+            Log::info('User after update:', $user->toArray());
+
+            DB::table('email_verifications')->where('email', $record->email)->delete();
+            return ApiResponse::sendResponse(200, 'Email Verified Successfully');
+        }
+        return ApiResponse::sendResponse(200, 'User Not Found');
+
+    }
+
+    public function sendVerificationEmail(Request $request)
+    {
+        if ($request->user('web')->hasVerifiedEmail()) {
+            return ApiResponse::sendResponse(200, 'User already verified.', null);
+        }
+
+        $request->user('web')->sendEmailVerificationNotification();
+
+        return ApiResponse::sendResponse(200,'Email verification link sent on your email address.', null);
     }
 
     public function resetPassword(Request $request)

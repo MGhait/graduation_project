@@ -15,6 +15,7 @@ use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -64,7 +65,7 @@ class AdminController extends Controller
             'email' => $user->email,
             'token' => $token,
         ]);
-        Mail::to($user->email)->send(new VerificationEmail(Crypt::encryptString($user->email),$user->name, Crypt::encryptString($token)));
+        Mail::to($user->email)->send(new VerificationEmail(Crypt::encryptString($user->email),$user->name, Crypt::encryptString($token), 'admin'));
 
         $data['token']= $user->createToken('APIToken')->plainTextToken;
         $data['name']= $user->name;
