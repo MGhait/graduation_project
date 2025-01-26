@@ -20,4 +20,14 @@ class Image extends Model
     {
         return $this->hasOne(IC::class, 'blog_diagram');
     }
+
+    public function chipImageOf(): HasOne
+    {
+        return $this->hasOne(ICDetails::class, 'chip');
+    }
+
+    public function logicDiagramOf(): HasOne
+    {
+        return $this->hasOne(IC::class, 'logic_diagram');
+    }
 }

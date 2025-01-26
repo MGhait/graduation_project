@@ -21,6 +21,11 @@ class IC extends Model
         return $this->hasMany(TruthTable::class, 'ic_id', 'id');
     }
 
+    public function icDetails() : HasMany
+    {
+        return $this->hasMany(ICDetails::class, 'ic_id', 'id');
+    }
+
     public function users()
     {
         return $this->belongsToMany(User::class, 'ic_user', 'ic_id', 'user_id')->withTimestamps();

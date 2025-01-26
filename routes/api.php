@@ -3,10 +3,12 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\FileController;
 use App\Http\Controllers\Api\ICController;
+use App\Http\Controllers\Api\ICDetailsController;
 use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\OTPController;
 use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\StoreController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -41,6 +43,11 @@ Route::get('/stores', StoreController::class);
 # ------------------- Messages Module ---------------#
 Route::post('/message', MessageController::class);
 
+# ------------------- Profile Module ---------------#
+Route::controller(ProfileController::class)->middleware('auth:sanctum')->group(function () {
+    Route::get('/profile', 'index');
+    Route::post('/profile', 'store');
+});
 
 # ------------------- IC Module ---------------#
 Route::prefix('ic')->controller(ICController::class)->group(function () {
@@ -59,6 +66,14 @@ Route::prefix('ic')->controller(ICController::class)->group(function () {
     Route::post('/store', 'store');
     Route::post('/truthTable', 'storeTruthTable');
     Route::post('/description', 'storeDescription');
+});
+
+Route::controller(ICDetailsController::class)->group(function () {
+    Route::post('/ic/details/store-parameters', 'storeParameter');
+    Route::post('/ic/details/store-details', 'storeDetails');
+    Route::post('/ic/details/store-packages', 'storePackages');
+    Route::post('/ic/details/store-features', 'storeFeatures');
+    Route::get('/ic/details/', 'viewDetails');
 });
 
 Route::post('/file/upload', [FileController::class, 'save']);
