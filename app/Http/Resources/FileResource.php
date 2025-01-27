@@ -16,6 +16,7 @@ class FileResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' =>$this->id,
             'fileName' => Str::slug($this->name) . '.' .$this->type,
             'path' => url('storage/' . $this->path)
         ];
