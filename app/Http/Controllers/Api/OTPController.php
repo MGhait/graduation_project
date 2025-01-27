@@ -37,7 +37,7 @@ class OTPController extends Controller
 //            'Your OTP Code',
 //            'Hello ' . $user->name . ', Your OTP code is ' . $user->otp
 //        );
-        Mail::to($user->email)->send(new OTPEmail($user->name, $user->otp));
+        Mail::to($user->email)->send(new OTPEmail($user->first_name, $user->otp));
 //        $data['redirect_url'] = route('otp.verify', ['email' => $user->email]);
 //        $data['link'] = url('/verify-otp?email=' . $user->email);
 

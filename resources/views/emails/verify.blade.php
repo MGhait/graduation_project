@@ -226,7 +226,7 @@
 <div class="email-container">
     <div class="header">
         <h1 class="fade-in">
-            <img src="{{asset('images/logo-1.png')}}" alt="Gadget Guru Logo" class="logo">
+            <img src="{{url('images/logo-1.png')}}" alt="Gadget Guru Logo" class="logo">
             Gadget Guru
         </h1>
         <p class="fade-in delay-1">Email Verification</p>

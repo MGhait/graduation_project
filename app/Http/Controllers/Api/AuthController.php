@@ -23,12 +23,14 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:' . User::class,
             'password' => ['required',Rules\Password::defaults()],
             'phone' => 'nullable|string|max:255',
         ],[],[
-            'name' => 'Name',
+            'first_name' => 'First Name',
+            'last_name' => 'Last Name',
             'email' => 'Email',
             'password' => 'Password',
             'phone' => 'Phone',
@@ -39,7 +41,8 @@ class AuthController extends Controller
         }
 
         $user = User::create([
-            'name' => $request->name,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'phone' => $request->phone ?? null,
@@ -53,11 +56,17 @@ class AuthController extends Controller
             'email' => $user->email,
             'token' => $token,
         ]);
-        Mail::to($user->email)->send(new VerificationEmail(Crypt::encryptString($user->email),$user->name, Crypt::encryptString($token)));
+//        Mail::to($user->email)->send(new VerificationEmail(Crypt::encryptString($user->email),$user->first_name, Crypt::encryptString($token)));
 
+        try {
+            Mail::to($user->email)->send(new VerificationEmail(Crypt::encryptString($user->email), $user->first_name, Crypt::encryptString($token)));
+        } catch (\Exception $e) {
+            Log::error('Email sending failed: ' . $e->getMessage());
+        }
 
         $data['token']= $user->createToken('APIToken')->plainTextToken;
-        $data['name']= $user->name;
+        $data['first_name']= $user->first_name;
+        $data['last_name']= $user->last_name;
         $data['email']= $user->email;
         return ApiResponse::sendResponse(201,'User Created Successfully',$data);
 
@@ -79,7 +88,8 @@ class AuthController extends Controller
         if (Auth::attempt($request->only('email', 'password'))) {
             $user = Auth::user();
             $data['token']= $user->createToken('APIToken')->plainTextToken;
-            $data['name']= $user->name;
+            $data['first_name']= $user->first_name;
+            $data['last_name']= $user->last_name;
             $data['email']= $user->email;
             return ApiResponse::sendResponse(200,'User Logged In Successfully',$data);
         }
@@ -90,7 +100,6 @@ class AuthController extends Controller
     {
         $token = Crypt::decryptString($request->query('token'));
         $email = Crypt::decryptString($request->query('email'));
-        dd($email);
 
         $record = DB::table('email_verifications')
             ->where('token', $token)

@@ -32,7 +32,7 @@ class VerificationEmail extends Mailable
     public function build()
     {
         return $this->subject('Verify Your Email Address')
-            ->view('emails.verify')
+            ->view('emails.verify2')
             ->with([
                 'name' => $this->name,
                 'url' => url('/' . $this->for. '/verify?email='. $this->email.'&token='. $this->token),

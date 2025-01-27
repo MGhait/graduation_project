@@ -12,7 +12,6 @@
         <td align="center">
             <!-- Email Container -->
             <table width="100%" cellpadding="0" cellspacing="0" style="background: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow: hidden;">
-                <!-- Header -->
                 <tr>
                     <td style="background: linear-gradient(276.1deg, #007aff 0.31%, #47b7e8 100%); color: #ffffff; text-align: center; padding: 20px 15px;">
                         <h1 style="margin: 0; font-size: 24px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px;">
@@ -22,19 +21,16 @@
                         <p style="margin-top: 5px; font-size: 16px;">Email Verification</p>
                     </td>
                 </tr>
-                <!-- Content -->
                 <tr>
                     <td style="padding: 20px; text-align: center;">
                         <h2 style="font-size: 20px; margin-bottom: 15px; color: #333333;">Welcome {{ $name }} to Gadget Guru</h2>
                         <p style="font-size: 14px; line-height: 1.6; color: #555555; margin-bottom: 20px;">
                             We received a request to reset the password for your Gadget Guru account.
-                            Note that this OTP code will expire after 20 minutes.
+                            Please verify your email address by clicking the button below or entering the OTP code provided.
                         </p>
-                        <!-- OTP Code -->
-                        <div style="background: #f4f9ff; border: 1px dashed #007aff; padding: 12px 24px; border-radius: 5px; font-size: 24px; color: #007aff; font-weight: bold; margin: 20px auto; width: 80%;">
-                            <span>{{ $otp }}</span>
-                        </div>
-                        <!-- Note -->
+                        <a href="{{ $url }}" style="display: inline-block; background: #007aff; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 5px; font-size: 16px; margin: 20px auto; transition: background-color 0.3s ease;">
+                            Verify your email
+                        </a>
                         <p style="font-size: 13px; color: #888888; margin-bottom: 10px;">
                             If you didn’t request this, you can safely ignore this email.
                         </p>
