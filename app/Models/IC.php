@@ -45,6 +45,11 @@ class IC extends Model
     {
         return $this->belongsTo(Image::class, 'blog_diagram');
     }
+
+    public function file() : BelongsTo
+    {
+        return $this->belongsTo(File::class, 'datasheet_file_id', 'id');
+    }
     public static function extractICCodes(string $input): array
     {
         // Regular expression to capture IC codes

@@ -28,7 +28,8 @@ class ICResource extends JsonResource
 //            'IC_store' => $this->store->name,
 //            'IC_views' => $this->views,
 //            'IC_likes' => $this->likes,
-            'IC_video' => $this->videoUrl
+            'IC_video' => $this->videoUrl,
+            'IC_file' => $this->file ? url('storage/' . $this->file->path) : null
 
         ];
     }
