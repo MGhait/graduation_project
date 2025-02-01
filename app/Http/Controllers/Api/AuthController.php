@@ -59,7 +59,7 @@ class AuthController extends Controller
 //        Mail::to($user->email)->send(new VerificationEmail(Crypt::encryptString($user->email),$user->first_name, Crypt::encryptString($token)));
 
         try {
-            Mail::to($user->email)->send(new VerificationEmail(Crypt::encryptString($user->email), $user->first_name, Crypt::encryptString($token)));
+            Mail::to($user->email)->send(new VerificatyouionEmail(Crypt::encryptString($user->email), $user->first_name, Crypt::encryptString($token)));
         } catch (\Exception $e) {
             Log::error('Email sending failed: ' . $e->getMessage());
         }
@@ -110,6 +110,10 @@ class AuthController extends Controller
             return ApiResponse::sendResponse(400, 'Invalid Token');
         }
 
+        if ($request->header('User-Agent') && str_contains($request->header('User-Agent'), 'Android')) {
+            return redirect('gadetguru://verify?email=' . $email . '&token=' . $token);
+        }
+
         $user = User::where('email', $email)->first();
         if ($user) {
             Log::info('User found:', $user->toArray());
@@ -119,9 +123,12 @@ class AuthController extends Controller
             Log::info('User after update:', $user->toArray());
 
             DB::table('email_verifications')->where('email', $record->email)->delete();
-            return ApiResponse::sendResponse(200, 'Email Verified Successfully');
+            // route to the verification successfully view in front
+            $url ='/verify?email=' . $email . '&token=' . $token; ;
+            return ApiResponse::sendResponse(200, 'Email Verified Successfully', $url);
         }
-        return ApiResponse::sendResponse(200, 'User Not Found');
+        $url = '/verification-error?email=' . $email . '&token=' . $token;
+        return ApiResponse::sendResponse(200, 'User Not Found', $url);
 
     }
 

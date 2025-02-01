@@ -32,26 +32,14 @@ class ShowICRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string',
-            'commName' => 'nullable|string',
-            'image' => 'required|exists:images,id',
-            'blog_diagram' => 'required|exists:images,id',
-            'store_id' => 'required|exists:stores,id',
-            'manName' => 'nullable|string',
-            'videoUrl' => 'nullable|string',
+            'id' => 'required|exists:ics,id',
         ];
     }
 
     public function attributes(): array
     {
         return [
-            'name' => 'Name',
-            'commName' => 'Commercial Name',
-            'image' => 'Image',
-            'blog_diagram' => 'Blog Diagram',
-            'store_id' => 'Store',
-            'manName' => 'Manufacturer Name',
-            'videoUrl' => 'Video Url',
+            'id' => 'IC',
         ];
     }
 }

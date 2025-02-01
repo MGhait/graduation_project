@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ShowICRequest;
 use App\Http\Requests\StoreICImageRequest;
 use App\Http\Requests\StoreICRequest;
 use App\Http\Requests\StoreTruthTable;
@@ -35,10 +36,11 @@ class ICController extends Controller
         return ApiResponse::sendResponse(201, 'IC Record Created Successfully', []);
     }
 
-    public function show($id)
+    public function show(ShowICRequest $request)
     {
-        $ic = IC::with(['mainImage', 'blogDiagram'])->find($id);
-        if (count($ic) > 0) {
+        $data = $request->validated();
+        $ic = IC::with(['mainImage', 'blogDiagram'])->find($data['id']);
+        if ($ic) {
             $ic->increment('views');
             return ApiResponse::sendResponse(200, 'IC Retrieved Successfully', New ICResource($ic));
         }
