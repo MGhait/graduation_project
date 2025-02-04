@@ -59,7 +59,7 @@ class AuthController extends Controller
 //        Mail::to($user->email)->send(new VerificationEmail(Crypt::encryptString($user->email),$user->first_name, Crypt::encryptString($token)));
 
         try {
-            Mail::to($user->email)->send(new VerificatyouionEmail(Crypt::encryptString($user->email), $user->first_name, Crypt::encryptString($token)));
+            Mail::to($user->email)->send(new VerificationEmail(Crypt::encryptString($user->email), $user->first_name, Crypt::encryptString($token)));
         } catch (\Exception $e) {
             Log::error('Email sending failed: ' . $e->getMessage());
         }
@@ -111,7 +111,17 @@ class AuthController extends Controller
         }
 
         if ($request->header('User-Agent') && str_contains($request->header('User-Agent'), 'Android')) {
-            return redirect('gadetguru://verify?email=' . $email . '&token=' . $token);
+
+            $user = User::where('email', $email)->first();
+            if ($user) {
+                $user->email_verified_at = now();
+                $user->save();
+                DB::table('email_verifications')->where('email', $record->email)->delete();
+
+                $link ='gadetguru://verify?email=' . $email ;
+                return ApiResponse::sendResponse(200, 'Email Verified Successfully', $link);
+            }
+            return ApiResponse::sendResponse(400, 'User Not Found Failed To Verify Email');
         }
 
         $user = User::where('email', $email)->first();
