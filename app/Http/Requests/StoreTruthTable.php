@@ -35,7 +35,7 @@ class StoreTruthTable extends FormRequest
         return [
             'input' => 'required|string',
             'output' => 'required|boolean',
-            'ic_id' => 'required|exists:ics,ic_id',
+            'ic_id' => 'required|exists:ics,id',
         ];
     }
 

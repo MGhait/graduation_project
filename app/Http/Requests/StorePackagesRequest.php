@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Helpers\ApiResponse;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class StorePackagesRequest extends FormRequest
@@ -33,10 +34,13 @@ class StorePackagesRequest extends FormRequest
     {
         return [
             'ic_details_id' => 'required|exists:ic_details,id',
-            'name' => 'required|string|unique:packages,name',
+            'name' => [
+                'required',
+                'string',
+                Rule::unique('packages')->where('ic_details_id', $this->input('ic_details_id'))
+            ],
             'num' => 'required|integer',
             'size' => 'required|string',
-
         ];
     }
 

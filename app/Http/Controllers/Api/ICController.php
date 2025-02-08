@@ -12,6 +12,7 @@ use App\Http\Requests\StoreTruthTable;
 use App\Http\Requests\UpdateICRequest;
 use App\Http\Resources\ICResource;
 use App\Http\Resources\ImageResource;
+use App\Http\Resources\TruthTableResource;
 use App\Models\IC;
 use App\Models\Image;
 use App\Models\TruthTable;
@@ -107,7 +108,7 @@ class ICController extends Controller
         $truthTable = TruthTable::create($data);
         if ($truthTable)
         {
-            return ApiResponse::sendResponse(201, 'Truth Table Created Successfully', []);
+            return ApiResponse::sendResponse(201, 'Truth Table Created Successfully', Resource::make(TruthTableResource::class,$truthTable));
         }
         return ApiResponse::sendResponse(200, 'Something Went Wrong', []);
     }
