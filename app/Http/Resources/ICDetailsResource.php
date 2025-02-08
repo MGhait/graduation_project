@@ -16,6 +16,7 @@ class ICDetailsResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'Chip_image' => $this->chipImage ? url('storage/images/' . $this->chipImage->url) : null,
             'Logic_DiagramImage' => $this->logicDiagram ? url('storage/images/' . $this->logicDiagram->url) : null,
             'Parameters' => $this->parameters ? Resource::make(ParametersResource::class,$this->parameters): null,

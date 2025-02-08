@@ -46,7 +46,7 @@ class ICDetailsController extends Controller
         if ($ic_details) {
             return ApiResponse::sendResponse(200, "IC Details added successfully.", []);
         }
-        return ApiResponse::sendResponse(200, "Something went wrong.",[]);
+        return ApiResponse::sendResponse(200, "Something went wrong.",Resource::make(ICDetailsResource::class,$ic_details));
     }
 
     public function storeParameter(StoreParametersRequest $request)

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Helpers\ApiResponse;
+use App\Helpers\Resource;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShowICRequest;
 use App\Http\Requests\StoreICImageRequest;
@@ -32,8 +33,8 @@ class ICController extends Controller
     {
         $data = $request->validated();
         $data['slug'] = Str::slug($data['commName']);
-        IC::create($data);
-        return ApiResponse::sendResponse(201, 'IC Record Created Successfully', []);
+        $ic = IC::create($data);
+        return ApiResponse::sendResponse(201, 'IC Record Created Successfully',Resource::make(ICResource::class,$ic) );
     }
 
     public function show(ShowICRequest $request)
