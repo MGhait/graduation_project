@@ -13,7 +13,7 @@ class FileController extends Controller
     public function save(Request $request)
     {
         $request->validate([
-            'file' => 'required|file|mimes:pdf|max:2048',
+            'file' => 'required|file|mimes:pdf',
             'name' => 'required',
         ]);
 
