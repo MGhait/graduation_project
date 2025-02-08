@@ -36,6 +36,7 @@ class StoreICRequest extends FormRequest
             'commName' => 'nullable|string',
             'image' => 'required|exists:images,id',
             'blog_diagram' => 'required|exists:images,id',
+            'datasheet_file_id' => 'required|exists:images,id',
             'store_id' => 'required|exists:stores,id',
             'manName' => 'nullable|string',
             'videoUrl' => 'nullable|string',
