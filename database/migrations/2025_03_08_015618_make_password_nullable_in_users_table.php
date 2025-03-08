@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('messages', function (Blueprint $table) {
-            $table->dropColumn('phone');
-            $table->string('subject')->after('email');
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('password')->nullable()->change();
         });
     }
 
@@ -22,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('messages', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             //
         });
     }

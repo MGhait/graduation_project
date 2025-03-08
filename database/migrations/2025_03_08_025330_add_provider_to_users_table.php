@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('messages', function (Blueprint $table) {
-            $table->dropColumn('phone');
-            $table->string('subject')->after('email');
+        Schema::table('users', function (Blueprint $table) {
+            $table->renameColumn('google_id', 'provider_id');
+            $table->string('provider')->after('provider_id')->nullable();
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('messages', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             //
         });
     }
