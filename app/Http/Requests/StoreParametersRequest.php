@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Helpers\ApiResponse;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class StoreParametersRequest extends FormRequest
@@ -33,7 +34,11 @@ class StoreParametersRequest extends FormRequest
     {
         return [
             'ic_details_id' => 'required|exists:ic_details,id',
-            'technology_family' => 'required|string|unique:parameters,technology_family',
+            'technology_family' => [
+                'required',
+                'string',
+                Rule::unique('parameters')->where('ic_details_id', $this->input('ic_details_id'))
+            ],
             'min_voltage' => 'required|numeric|min:0',
             'max_voltage' => 'required|numeric|gt:min_voltage',
             'channels_number' => 'required|integer',
