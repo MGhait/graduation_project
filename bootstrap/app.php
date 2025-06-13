@@ -12,8 +12,9 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
         then: function () {
-            Route::prefix('admin')
-                ->name('admin.')
+            // cause a conflict with filament
+            Route::prefix('admin-custom')
+                ->name('admin-custom.')
                 ->group(base_path('routes/admin.php'));
 
             Route::prefix('api/v2')
