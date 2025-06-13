@@ -6,9 +6,11 @@ use App\Http\Controllers\Api\ICController;
 use App\Http\Controllers\Api\ICDetailsController;
 use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\OTPController;
+use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\StoreController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ImageProcessingController;
+use App\Http\Controllers\SocialiteController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -34,14 +36,50 @@ Route::controller(AuthController::class)->group(function () {
 Route::post('/forget-password', [OTPController::class, 'forgetPassword']);
 Route::post('/verify-otp', [OTPController::class, 'verifyOTP'])->name('otp.verify');
 
+# ------------------- Socialite Module ---------------#
+Route::middleware(['web'])->controller(SocialiteController::class)->group(function () {
+    Route::get('/{provider}/login', 'login');
+    Route::get('/{provider}/redirect', 'callback');
+});
+
 # ------------------- Settings Module ---------------#
 Route::get('/settings', SettingController::class);
 
 # ------------------- Stores Module ---------------#
-Route::get('/stores', StoreController::class);
+//Route::get('/stores', [StoreController::class, "index"]);
+Route::controller(StoreController::class)->group(function () {
+   Route::get('/stores', 'index');
+   Route::get('/stores/nearby', 'nearby');
+   Route::get('/stores/nearat/{distance}', 'nearat');
+});
+
+//Route::get('/api/nearby-stores', function (Request $request) {
+//    $userLat = $request->lat;
+//    $userLng = $request->lng;
+//    $radius = $request->radius ?? 10; // in KM
+//
+//    $stores = DB::table('stores')
+//        ->select('id', 'name', 'latitude', 'longitude')
+//        ->selectRaw("
+//            (6371 * acos(
+//                cos(radians(?)) * cos(radians(latitude)) *
+//                cos(radians(longitude) - radians(?)) +
+//                sin(radians(?)) * sin(radians(latitude))
+//            )) AS distance", [$userLat, $userLng, $userLat])
+//        ->having('distance', '<=', $radius)
+//        ->orderBy('distance')
+//        ->get();
+//
+//    return response()->json($stores);
+//});
 
 # ------------------- Messages Module ---------------#
 Route::post('/message', MessageController::class);
+
+# ------------------- Images Processing Module ---------------#
+Route::controller(ImageProcessingController::class)->group(function () {
+    Route::post('/imageUpload', 'upload');
+});
 
 # ------------------- Profile Module ---------------#
 Route::controller(ProfileController::class)->middleware('auth:sanctum')->group(function () {
@@ -53,7 +91,7 @@ Route::controller(ProfileController::class)->middleware('auth:sanctum')->group(f
 Route::prefix('ic')->controller(ICController::class)->group(function () {
     Route::get('/', 'index');
     Route::get('/popular', 'popularICs');
-    Route::get('/get/{ic}', 'show');
+    Route::get('/show', 'show');
     Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/save', 'saveIC');
         Route::get('/saved', 'getSavedICs');
