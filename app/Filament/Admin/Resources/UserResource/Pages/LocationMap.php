@@ -46,7 +46,6 @@ use Filament\Resources\Pages\Page;
 class LocationMap extends Page
 {
     use InteractsWithRecord;
-//    protected static string $resource = UserResource::class;
     protected static string $resource = UserResource::class;
     protected static string $view = 'filament.admin.resources.user-resource.pages.location-map';
 
@@ -67,7 +66,7 @@ class LocationMap extends Page
         return [
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
-            'hasLocation' => !is_null($this->latitude) && !is_null($this->longitude),
+            'hasLocation' => !is_null($this->latitude) && !is_null($this->longitude), // $this->record->has_location
             'record' => $this->record ?? null,
         ];
     }
