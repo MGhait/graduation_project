@@ -9,7 +9,7 @@ class Resource
     /**
      * Dynamically handle resource creation for single objects or collections.
      *
-     * @param string $resourceClass The fully qualified class name of the resource (e.g., PackagesResource::class).
+     * @param string $resourceClass The fully qualified class name of the resource (e.g., PackageResource::class).
      * @param mixed $data The data to be transformed (single object, array, or collection).
      * @return mixed Returns a resource instance or a collection of resources.
      */
