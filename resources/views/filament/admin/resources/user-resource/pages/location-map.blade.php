@@ -29,16 +29,15 @@
 
                         const map = L.map('map').setView(
                             [mapData.latitude, mapData.longitude],
-                            13
+                            15
                         );
 
-                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                            attribution: '© OpenStreetMap contributors'
-                        }).addTo(map);
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
                         L.marker([mapData.latitude, mapData.longitude])
                             .addTo(map)
-                            .bindPopup(mapData.name) // this not shown
+                            .bindPopup(` Current User
+                            <br><strong> ` + mapData.name + `</strong>`)
                             .openPopup();
                     });
                 </script>
