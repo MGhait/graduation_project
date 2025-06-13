@@ -10,15 +10,34 @@ use Illuminate\Http\Request;
 
 class StoreController extends Controller
 {
-    /**
-     * Handle the incoming request.
-     */
-    public function __invoke(Request $request)
+
+    public function index(Request $request)
     {
         $stores = Store::all();
         if (count($stores) > 0) {
             return ApiResponse::sendResponse(200, 'Stores Retrieved Successfully', StoreResource::collection($stores));
         }
         return ApiResponse::sendResponse(200, 'No stores were found',[]);
+    }
+
+    public function nearby(Request $request){
+        $lat = $request->lat;
+        $lng = $request->lng;
+        $store = Store::getNearby($lat, $lng);
+        if (count($store) > 0) {
+            return ApiResponse::sendResponse(200, 'Nearby Stores Found', StoreResource::collection($store));
+        }
+        return ApiResponse::sendResponse(200, 'No stores were found',[]);
+    }
+
+    public function nearat(Request $request, $distance)
+    {
+        $lat = $request->lat;
+        $lng = $request->lng;
+        $store = Store::getNearby($lat, $lng, $distance);
+        if (count($store) > 0) {
+            return ApiResponse::sendResponse(200, 'Stores in this area', StoreResource::collection($store));
+        }
+        return ApiResponse::sendResponse(200, 'No stores were found at selected location',[]);
     }
 }
