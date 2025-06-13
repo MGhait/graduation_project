@@ -6,13 +6,38 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
+    protected $appends = ['has_location'];
 
+    public function getHasLocationAttribute(): bool
+    {
+        return !empty($this->latitude) && !empty($this->longitude);
+    }
+
+    public function getNameAttribute()
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
+
+
+    public function getNearbyStores($userLat, $userLng, $radiusInKm = 10)
+    {
+        return DB::table('stores')
+            ->select('*')
+            ->selectRaw(
+                '(6371 * acos(cos(radians(?)) * cos(radians(latitude)) * cos(radians(longitude) - radians(?)) + sin(radians(?)) * sin(radians(latitude)))) AS distance',
+                [$userLat, $userLng, $userLat]
+            )
+            ->having('distance', '<', $radiusInKm)
+            ->orderBy('distance')
+            ->get();
+    }
 
     public function generateOTP()
     {
@@ -43,6 +68,7 @@ class User extends Authenticatable
     protected $guarded = ['id'];
 
 
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -51,6 +77,11 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+    ];
+
+    protected $casts = [
+        'latitude' => 'float',
+        'longitude' => 'float',
     ];
 
     /**

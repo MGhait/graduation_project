@@ -30,4 +30,10 @@ class Image extends Model
     {
         return $this->hasOne(IC::class, 'logic_diagram');
     }
+
+//    public function getUrlAttribute()
+//    {
+//        // If your database stores relative paths
+//        return asset('storage/' . $this->url);
+//    }
 }

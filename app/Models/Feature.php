@@ -11,7 +11,7 @@ class Feature extends Model
 
     protected $guarded = ['id'];
 
-    public function icDetails() :BelongsTo
+    public function icDetail() :BelongsTo
     {
         return $this->belongsTo(ICDetails::class, 'ic_details_id', 'id');
     }
