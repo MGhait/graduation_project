@@ -46,7 +46,7 @@ class TotalNumber extends BaseWidget
                 ->iconPosition('start')
                 ->description('Total Stores Worked With Us')
                 ->descriptionIcon('heroicon-o-chevron-up', 'after')
-                ->iconColor('danger')
+                ->iconColor('light') // can be added form the AdminPanelProvider
                 ->progress(80),
         ];
     }
