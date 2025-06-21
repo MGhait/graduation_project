@@ -37,16 +37,17 @@ class MessageResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')->searchable(),
-                TextColumn::make('email')->searchable()->copyable(),
-                TextColumn::make('subject')->searchable(),
+                TextColumn::make('name')->toggleable()->searchable(),
+                TextColumn::make('email')->toggleable()->searchable()->copyable(),
+                TextColumn::make('subject')->toggleable()->searchable(),
                 BadgeColumn::make('status')
                     ->colors([
                         'primary' => 'unread',
                         'success' => 'read',
                     ])
+                    ->toggleable()
                     ->sortable(),
-                TextColumn::make('created_at')->since()->sortable(),
+                TextColumn::make('created_at')->toggleable()->label("Sent At")->since()->sortable(),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
@@ -56,17 +57,20 @@ class MessageResource extends Resource
                     ]),
             ])
             ->actions([
-                Tables\Actions\Action::make('markAsRead')
-                    ->label('Mark as Read')
-                    ->icon('heroicon-o-check-circle')
-                    ->visible(fn($record) => $record->status === 'unread')
-                    ->action(fn($record) => $record->update(['status' => 'read']))
-                    ->color('success'),
+//                Tables\Actions\Action::make('markAsRead')
+//                    ->label('')
+//                    ->icon('heroicon-o-check-circle')
+//                    ->iconSize('lg')
+//                    ->visible(fn($record) => $record->status === 'unread')
+//                    ->action(fn($record) => $record->update(['status' => 'read']))
+//                    ->color('success'),
 
-                Tables\Actions\ViewAction::make(),
+                Tables\Actions\ViewAction::make()->iconSize('lg')->label(""),
 
                 Tables\Actions\DeleteAction::make()
+                    ->label("")
                     ->icon('heroicon-o-trash')
+                    ->iconSize('lg')
                     ->color('danger'),
             ])
 //            ->actions([
