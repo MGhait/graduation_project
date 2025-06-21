@@ -65,12 +65,12 @@ class MessageResource extends Resource
 //                    ->action(fn($record) => $record->update(['status' => 'read']))
 //                    ->color('success'),
 
-                Tables\Actions\ViewAction::make()->iconSize('lg')->label(""),
+                Tables\Actions\ViewAction::make(),
 
                 Tables\Actions\DeleteAction::make()
-                    ->label("")
+//                    ->label("")
                     ->icon('heroicon-o-trash')
-                    ->iconSize('lg')
+//                    ->iconSize('lg')
                     ->color('danger'),
             ])
 //            ->actions([
