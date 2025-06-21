@@ -38,6 +38,8 @@ class UpdateProfileRequest extends FormRequest
             'last_name' => ['nullable', 'string', 'max:255'],
             'email' => ['nullable', 'string', 'email', 'max:255', Rule::unique('users', 'email')->ignore($this->user()->id)],
             'phone' => ['nullable', 'string', 'max:11', 'regex:/^[0-9]{11}$/'],
+            'longitude' => ['nullable', 'numeric', 'max:255'],
+            'latitude' => ['nullable', 'numeric', 'max:255'],
 
         ];
     }
