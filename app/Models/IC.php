@@ -18,6 +18,11 @@ class IC extends Model
     {
         return parent::getEloquentQuery()->with(['mainImage', 'blogDiagram']);
     }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
 //    public function store() : BelongsTo
 //    {
 //        return $this->belongsTo(Store::class);
@@ -25,7 +30,8 @@ class IC extends Model
     public function stores()
     {
         return $this
-            ->belongsToMany(Store::class, 'ic_store', 'ic_id', 'store_id')
+            ->belongsToMany(Store::class,
+                'ic_store', 'ic_id', 'store_id')
             ->using(ICStore::class)                // custom pivot model
             ->withPivot(['quantity', 'price'])
             ->withTimestamps();

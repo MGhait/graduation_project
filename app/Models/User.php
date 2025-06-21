@@ -20,6 +20,11 @@ class User extends Authenticatable
         return !empty($this->latitude) && !empty($this->longitude);
     }
 
+    public function getRouteKeyName(): string
+    {
+        return 'username';
+    }
+
     public function getNameAttribute()
     {
         return $this->first_name . ' ' . $this->last_name;

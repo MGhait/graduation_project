@@ -5,6 +5,7 @@ namespace App\Filament\Admin\Resources;
 use App\Filament\Admin\Resources\UserResource\Pages;
 use App\Filament\Admin\Resources\UserResource\Pages\LocationMap;
 use App\Filament\Admin\Resources\UserResource\RelationManagers;
+use App\Filament\Admin\Resources\UserResource\Widgets\TotalNumber;
 use App\Filament\Admin\Resources\UserResource\Widgets\UserLocationMap;
 use App\Forms\Components\UserMapPicker;
 use App\Models\Store;
@@ -146,7 +147,7 @@ class UserResource extends Resource
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\Action::make('view_map')
                     ->label('View Map')
-                    ->url(fn($record) => LocationMap::getUrl(['record' => $record->id]))
+                    ->url(fn($record) => LocationMap::getUrl(['record' => $record->username]))
                     ->icon('heroicon-o-map')
                     ->disabled(fn($record) => !$record->latitude || !$record->longitude)
                 //                    ->tooltip(fn($record) => !$record->latitude || !$record->longitude ? 'Location not available' : null),
@@ -178,6 +179,7 @@ class UserResource extends Resource
     {
         return [
             UserLocationMap::class,
+            TotalNumber::class
         ];
     }
 }

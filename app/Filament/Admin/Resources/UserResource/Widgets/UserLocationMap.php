@@ -32,19 +32,20 @@ class UserLocationMap extends Widget
         ]);
     }
 
-    public function getRecord()
-    {
-        return request()->route('record');
-    }
+//    public function getRecord()
+//    {
+//        return request()->route('record');
+//    }
 
     public function render(): \Illuminate\Contracts\View\View
     {
-        $user = User::findOrFail($this->getRecord());
+//        $username = $this->getRecord();
+//        $user = User::where('username', $username)->findOrFail();
 
         return view(static::$view, [
-            'latitude' => $user->latitude,
-            'longitude' => $user->longitude,
-            'name' => $user->name,
+            'latitude' => $this->record->latitude,
+            'longitude' => $this->record->longitude,
+            'name' => $this->record->name,
         ]);
     }
 }
