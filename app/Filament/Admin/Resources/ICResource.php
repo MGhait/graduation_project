@@ -4,6 +4,7 @@ namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\ICResource\Pages;
 use App\Filament\Admin\Resources\ICResource\RelationManagers;
+use App\Helpers\UniqueSlug;
 use App\Models\IC;
 use App\Models\Image;
 use Filament\Forms;
@@ -22,6 +23,7 @@ use Filament\Tables;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
@@ -46,16 +48,20 @@ class ICResource extends Resource
                 Wizard\Step::make('Main Data')
                     ->schema([
                         Forms\Components\TextInput::make('name')
-                            ->label('Name or Code')
+                            ->label('Code')
                             ->required()
                             ->maxLength(255),
                         Forms\Components\TextInput::make('commName')
                             ->label("Commercial Name")
                             ->maxLength(255)
-                            ->default(null),
+                            ->default(null)
+                            ->reactive()
+                            ->afterStateUpdated(fn(Forms\Set $set, ?string $state) => $set('slug', UniqueSlug::make($state, IC::class))),
                         Forms\Components\TextInput::make('slug') // to handled later
                         ->label("Slug")
                             ->required()
+                            ->disabled()
+                            ->dehydrated(true)
                             ->maxLength(255),
                         Forms\Components\TextInput::make('manName')
                             ->label('Manufacture Name')
@@ -242,10 +248,14 @@ class ICResource extends Resource
                             Forms\Components\TextInput::make('commName')
                                 ->label("Commercial Name")
                                 ->maxLength(255)
-                                ->default(null),
-                            Forms\Components\TextInput::make('slug')
-                                ->label("Slug")
+                                ->default(null)
+                                ->reactive()
+                                ->afterStateUpdated(fn(Forms\Set $set, ?string $state) => $set('slug', UniqueSlug::make($state, IC::class))),
+                            Forms\Components\TextInput::make('slug') // to handled later
+                            ->label("Slug")
                                 ->required()
+                                ->disabled()
+                                ->dehydrated(true)
                                 ->maxLength(255),
                             Forms\Components\TextInput::make('manName')
                                 ->label('Manufacture Name')
