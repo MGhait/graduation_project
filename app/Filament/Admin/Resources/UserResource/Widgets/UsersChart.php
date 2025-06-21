@@ -21,14 +21,16 @@ class UsersChart extends AdvancedChartWidget
     protected static ?string $badgeIconPosition = 'after';
 
     protected static ?string $badgeSize = 'sm';
+    protected int|string|array $columnSpan = '8';
 
 
-    public ?string $filter = 'month';
+
+    public ?string $filter = 'quarter';
 
     protected function getFilters(): ?array
     {
         return [
-            'week' => 'Last 7 Days',
+//            'week' => 'Last 7 Days',
             'month' => 'Last 30 Days',
             'quarter' => 'Last 3 Months',
             'year' => 'Last 12 Months',
@@ -49,10 +51,10 @@ class UsersChart extends AdvancedChartWidget
         $filter = $this->filter ?? 'month';
 
         switch ($filter) {
-            case 'today':
-                return $this->getTodayData();
-            case 'week':
-                return $this->getWeekData();
+//            case 'today':
+//                return $this->getTodayData();
+//            case 'week':
+//                return $this->getWeekData();
             case 'month':
                 return $this->getMonthData();
             case 'quarter':
@@ -303,7 +305,6 @@ class UsersChart extends AdvancedChartWidget
             return $this->getData();
         });
     }
-
     protected function getType(): string
     {
         return 'line';
