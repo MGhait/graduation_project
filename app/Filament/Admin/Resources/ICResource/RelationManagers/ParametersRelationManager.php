@@ -95,8 +95,6 @@ class ParametersRelationManager extends RelationManager
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make()
-                    ->extraAttributes(['style' => 'background: red !important'])
-//                    ->visible(fn () => true),
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
