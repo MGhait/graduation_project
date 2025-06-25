@@ -16,4 +16,13 @@ class ListICS extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            ICResource\Widgets\TotalIC::class,
+//            \App\Filament\Admin\Resources\ICResource\Widgets\TopViewedICs::class,
+        ];
+    }
+
 }
