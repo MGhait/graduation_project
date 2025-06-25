@@ -3,6 +3,8 @@
 namespace App\Filament\Admin\Pages;
 
 use App\Filament\Admin\Resources\ICResource\Widgets\TopViewedICs;
+use App\Filament\Admin\Resources\StoreResource\Widgets\ICStoresChart;
+use App\Filament\Admin\Resources\StoreResource\Widgets\StatsStack;
 use App\Filament\Admin\Resources\UserResource\Widgets\TotalNumber;
 use App\Filament\Admin\Resources\UserResource\Widgets\UsersChart;
 use Filament\Pages\Page;
@@ -17,6 +19,8 @@ class Dashboard extends Page
     {
         return [
             TotalNumber::class,
+            ICStoresChart::class,
+            StatsStack::class,
             TopViewedICs::class,
             UsersChart::class,
         ];
