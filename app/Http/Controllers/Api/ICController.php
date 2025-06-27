@@ -9,7 +9,6 @@ use App\Http\Requests\ShowICRequest;
 use App\Http\Requests\StoreICImageRequest;
 use App\Http\Requests\StoreICRequest;
 use App\Http\Requests\StoreTruthTable;
-use App\Http\Requests\UpdateICRequest;
 use App\Http\Resources\ICResource;
 use App\Http\Resources\ImageResource;
 use App\Http\Resources\TruthTableResource;
@@ -67,8 +66,11 @@ class ICController extends Controller
         $user = auth()->user(); // Get the authenticated user
         $icId = $request->input('ic_id');
 
-        // Attach the IC to the user (prevents duplicates)
-        $user->savedIcs()->syncWithoutDetaching($icId);
+        $attached = $user->savedIcs()->syncWithoutDetaching($icId);
+        if (!empty($attached['attached'])) {
+            // Increment the 'likes' column (or whatever it's called)
+            Ic::where('id', $icId)->increment('likes');
+        }
         $data['user'] = $user->email;
         $data['ic_id'] = $icId;
 
@@ -99,6 +101,7 @@ class ICController extends Controller
             return ApiResponse::sendResponse(404, 'IC not found in user\'s saved list');
         }
         $user->savedIcs()->detach($icId);
+        Ic::where('id', $icId)->where('likes', '>', 0)->decrement('likes');
         return ApiResponse::sendResponse(200, 'IC Removed Successfully');
     }
 
@@ -117,7 +120,6 @@ class ICController extends Controller
     {
         $query = $request->input('query');
         $codes = IC::extractICCodes($query);
-//        dd($codes);
         $query = IC::query();
 
         foreach ($codes as $code) {
@@ -144,7 +146,7 @@ class ICController extends Controller
     {
         $query = $request->input('query');
 
-        $ics = IC::with(['mainImage', 'blogDiagram', 'store'])
+        $ics = IC::with(['mainImage', 'blogDiagram'])
             ->where('commName', 'like', '%' . $query . '%')
             ->orWhere('name', 'like', '%' . $query . '%')
             ->orWhere('slug', 'like', '%' . $query . '%')
@@ -155,10 +157,7 @@ class ICController extends Controller
         }
         return ApiResponse::sendResponse(200, 'No Ics Found', null);
     }
-    public function update(UpdateICRequest $request, IC $ic)
-    {
 
-    }
     public function storeImage(StoreIcImageRequest $request)
     {
         $request->validated();
