@@ -117,8 +117,46 @@
         </div>
     @endif
 </div>
-<div wire:ignore @if(!$lat || !$lng) class="mt-2 p-4 bg-gray-50 rounded text-gray-500" @else style="height: 400px;" @endif id="map"></div>
+<div wire:ignore
+     @if(!$lat || !$lng)
+         class="mt-2 p-4 bg-gray-50 rounded text-gray-500"
+     @else
+         class="relative w-full h-96 rounded-lg overflow-hidden border border-gray-200"
+         style="height: 400px; max-width: 100%; z-index: 1;"
+     @endif
+     id="map">
+</div>
 
+<style>
+    /* Ensure the map container is properly constrained */
+    #map {
+        position: relative !important;
+        z-index: 1 !important;
+        max-width: 100% !important;
+        overflow: hidden;
+    }
+
+    /* Fix Leaflet container z-index issues */
+    #map .leaflet-container {
+        z-index: 1 !important;
+        position: relative !important;
+    }
+
+    /* Ensure map controls don't overflow */
+    #map .leaflet-control-container {
+        z-index: 2 !important;
+    }
+
+    /* Prevent map from breaking out of its container */
+    #map .leaflet-map-pane {
+        z-index: 1 !important;
+    }
+
+    /* Fix any popup z-index issues within the map */
+    #map .leaflet-popup {
+        z-index: 3 !important;
+    }
+</style>
 <script>
     const userLat = {{ $lat }};
     const userLng = {{ $lng }};
