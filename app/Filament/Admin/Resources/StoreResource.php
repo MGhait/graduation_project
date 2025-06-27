@@ -4,22 +4,16 @@ namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\StoreResource\Pages;
 use App\Filament\Admin\Resources\StoreResource\RelationManagers;
-use App\Models\IC;
 use App\Models\Store;
 use Dotswan\MapPicker\Fields\Map;
-use Filament\Actions\Action;
 use Filament\Forms;
 use Filament\Forms\Components\Component;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
-use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-
 class StoreResource extends Resource
 {
     protected static ?string $model = Store::class;
@@ -43,8 +37,6 @@ class StoreResource extends Resource
 
     public static function form(Form $form): Form
     {
-        // Determine the current operation (create, edit, or view)
-        $operation = static::getFormOperation();
         return $form
             ->schema([
                 Forms\Components\Group::make([
@@ -110,10 +102,16 @@ class StoreResource extends Resource
 //                                    })->visible(fn(Component $component) => $component->getLivewire()->getForm('form')->getOperation() == 'view'),
                                 Forms\Components\Hidden::make('latitude')->dehydrated(),
                                 Forms\Components\Hidden::make('longtitude')->dehydrated(),
-                            ])->visible(fn(Component $component) => $component->getLivewire()->getForm('form')->getOperation() !== 'view'),
+                            ])->visible(function (Component $component) {
+                                $livewire = $component->getLivewire();
+                                return $livewire instanceof Pages\EditStore || $livewire instanceof Pages\CreateStore;
+                            }),
                         Forms\Components\ViewField::make('store-location-map')
                             ->view('filament.components.store-location')
-                            ->visibleOn('view')
+                            ->visible(function (Component $component) {
+                                $livewire = $component->getLivewire();
+                                return $livewire instanceof Pages\ViewStore;
+                            })
                             ->dehydrated(false),
                         ]),
                 ])->columnSpanFull()
@@ -162,8 +160,6 @@ class StoreResource extends Resource
             ])
             ->bulkActions([
                     Tables\Actions\DeleteBulkAction::make(),
-//                Tables\Actions\BulkActionGroup::make([
-//                ]),
             ]);
     }
 
@@ -171,7 +167,6 @@ class StoreResource extends Resource
     {
         return [
             RelationManagers\InventoryRelationManager::class,
-//            RelationManagers\IcsRelationManager::class
         ];
     }
 
