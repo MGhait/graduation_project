@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\StoreResource;
+use App\Models\IC;
 use App\Models\Store;
 use Illuminate\Http\Request;
 
@@ -28,6 +29,15 @@ class StoreController extends Controller
             return ApiResponse::sendResponse(200, 'Nearby Stores Found', StoreResource::collection($store));
         }
         return ApiResponse::sendResponse(200, 'No stores were found',[]);
+    }
+
+    public function findIc($icId)
+    {
+        $ic = IC::with('stores')->find($icId);
+        if (!$ic) {
+            return ApiResponse::sendResponse(200, 'IC Out Of Stock', []);
+        }
+        return ApiResponse::sendResponse(200, 'IC Found In These Stores', StoreResource::collection($ic->stores));
     }
 
     public function nearat(Request $request, $distance)
