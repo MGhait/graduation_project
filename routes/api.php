@@ -49,8 +49,9 @@ Route::get('/settings', SettingController::class);
 //Route::get('/stores', [StoreController::class, "index"]);
 Route::controller(StoreController::class)->group(function () {
    Route::get('/stores', 'index');
-   Route::get('/stores/nearby', 'nearby');
-   Route::get('/stores/nearat/{distance}', 'nearat');
+   Route::post('/stores/nearby', 'nearby');
+   Route::post('/stores/nearat/{distance}', 'nearat');
+   Route::post('/stores/find/{ic}', 'findIc');
 });
 
 //Route::get('/api/nearby-stores', function (Request $request) {
