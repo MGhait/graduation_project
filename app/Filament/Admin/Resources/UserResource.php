@@ -21,6 +21,7 @@ use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Notifications\Actions\Action;
@@ -137,6 +138,16 @@ class UserResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('provider')
                     ->placeholder('Normal Login'),
+                IconColumn::make('email_verified_at')
+                    ->label('Is Verified')
+                    ->boolean()
+                    ->trueIcon('heroicon-o-check-circle')
+                    ->falseIcon('heroicon-o-x-circle')
+                    ->trueColor('primary')
+                    ->falseColor('danger')
+                    ->extraAttributes(['class' => 'flex justify-center']) // centers the icon horizontally
+                    ->default(false)
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
