@@ -72,9 +72,9 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const map = L.map('map').setView([{{ $lat }}, {{ $lng }}], 13);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
+        // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        //     attribution: '&copy; OpenStreetMap contributors'
+        // }).addTo(map);
 
         const marker = L.marker([{{ $lat }}, {{ $lng }}], {draggable: true}).addTo(map);
 

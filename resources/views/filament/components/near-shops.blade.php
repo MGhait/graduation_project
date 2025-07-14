@@ -289,7 +289,7 @@
             // }).addTo(map);
 
             // Fix map size issues (especially in tabs/panels)
-            setTimeout(() => map.invalidateSize(), 200);
+            // setTimeout(() => map.invalidateSize(), 200);
         });
     }
 </script>
