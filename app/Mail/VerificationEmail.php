@@ -8,6 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Crypt;
 
 class VerificationEmail extends Mailable
 {
@@ -30,12 +31,12 @@ class VerificationEmail extends Mailable
         $this->for = $for;
     }
     public function build()
-    {
+    { // need to check security of sending email decrypted to user
         return $this->subject('Verify Your Email Address')
             ->view('emails.verify2')
             ->with([
                 'name' => $this->name,
-                'url' => url('/' . $this->for. '/verify?email='. $this->email.'&token='. $this->token),
+                'url' => url('/' . $this->for. '/verify?email='. Crypt::decryptString($this->email).'&token='. $this->token),
             ]);
     }
 
