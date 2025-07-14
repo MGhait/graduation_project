@@ -129,6 +129,9 @@ class InventoryRelationManager extends RelationManager
                 Tables\Actions\CreateAction::make()->visible(true)
                     ->label('Attach IC')
                     ->modalHeading('Attach an IC')
+                    ->slideOver()
+                    ->modalWidth('xl')
+                    ->modalAlignment('right') // or 'left'
                     ->visible(fn() => $this->getOwnerRecord()->exists)
                     ->form([
                         Forms\Components\Select::make('ic_id')
