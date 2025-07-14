@@ -25,6 +25,8 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->id('admin')
             ->path('admin')
+//            ->viteTheme('resources/css/filament/admin/theme.css')
+            ->default()
             ->colors([
                 'primary' => "#007AFF",
                 'secondary' => "#000000",
@@ -35,17 +37,31 @@ class AdminPanelProvider extends PanelProvider
 //                'gray' => "#000000",
                 'light' => "#FFFF00",
             ])
-            ->brandName('Gudget Guru')
+//            ->brandLogo(fn () => view('filament.components.brand'))
+            ->favicon(asset('images/logo-1.png'))
             ->brandLogo(asset('images/logo-1.png'))
+            ->brandLogoHeight('3rem')
+//            ->topNavigation() // This enables the top bar
+            //            ->brandLogo(asset('images/logo-1.png'))
+//            ->brandName('Gudget Guru')// here only the logo shows and this is shown if remove or commented the brandLogo
             ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\\Filament\\Admin\\Resources')
             ->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\\Filament\\Admin\\Pages')
             ->pages([
-                Pages\Dashboard::class,
+//                Pages\Dashboard::class,
             ])
+//            ->renderHook('panels::header.start', fn() => view('filament.admin.brand-nav'))
+            ->renderHook(
+                'panels::header.start',
+                fn() => view('filament.admin.brand-nav')
+            )
+            ->renderHook(
+                'panels::sidebar.header',
+                fn() => view('filament.sidebar-content')
+            )
             ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\\Filament\\Admin\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+//                Widgets\AccountWidget::class,
+//                Widgets\FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
